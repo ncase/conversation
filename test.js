@@ -1,3 +1,31 @@
+window.Game = {};
+
+Game.choices = {};
+
+var game_output = document.getElementById("game_output");
+Game.say = function(person,message){
+	var dom = document.createElement("div");
+	dom.innerHTML = "<b>"+person+": </b><br>"+message;
+	game_output.appendChild(dom);
+};
+Game.choose = function(choices,callback){
+	var dom = document.createElement("div");
+	for(var i=0;i<choices.length;i++){
+		var button = document.createElement("button");
+		button.innerHTML = choices[i];
+		button.onclick = (function(choice,echo){
+			return function(){
+				game_output.innerHTML = "";
+				callback(choice,echo);
+			};
+		})(i,choices[i]);
+		dom.appendChild(button);
+	}
+	game_output.appendChild(dom);
+};
+
+////////////////////////////////////////////////
+
 function Start(){
 	
 	Game.say("Clem",	"Lee!");
@@ -11,7 +39,7 @@ function Start(){
 function Choose_Soda(choice){
 
 	// Clementine will remember that.
-	Game.choices.Choose_Soda = ["coke","pepsi","neither","both"][choice];
+	Game.choices.Choose_Soda = ["Coke","Pepsi","neither","both"][choice];
 
 	// Four possible conversations
 	if(choice==0){
@@ -40,22 +68,28 @@ function Choose_Soda(choice){
 function Kenny_Enters(choice,echo){
 
 	// Clem likes what you hate
-	var you_hate = {
-		coke: "Pepsi",
-		pepsi: "Coke",
+	Game.choices.Clem_Likes = ({
+		Coke: "Pepsi",
+		Pepsi: "Coke",
+		neither: "soda",
+		both: "soda"
+	})[Game.choices.Choose_Soda];
+
+	// Kenny thinks you hate...
+	var kenny_says = ({
+		Coke: "Pepsi",
+		Pepsi: "Coke",
 		neither: "soda",
 		both: "America"
-	};
-	you_hate = you_hate[Game.choices.Choose_Soda];
-	Game.choices.Clem_Likes = you_hate;
+	})[Game.choices.Choose_Soda];
 
 	// Conversation
 	Game.say("Lee",		echo);
-	Game.say("Kenny",	"Lee, you talkin' shit about "+you_hate+"?!");
+	Game.say("Kenny",	"Lee, you talkin' shit about "+kenny_says+"?!");
 	Game.say("Lee",		"Kenny, it's not what you think.");
-	Game.say("Clem",	"He was talkin' shit about "+you_hate+"!");
+	Game.say("Clem",	"He was talkin' shit about "+kenny_says+"!");
 	Game.say("Lee",		"...Clementine!");
-	Game.say("Kenny",	"[points gun at Lee] No one talks shit about "+you_hate+" and gets away with it!");
+	Game.say("Kenny",	"[points gun at Lee] No one talks shit about "+kenny_says+" and gets away with it!");
 	Game.say("Lee",		"Kenny, calm down!");
 	Game.say("Kenny",	"This IS calm.");
 	Game.say("Lee",		"Put the gun down, and let's just talk about this over a nice cup of...");
@@ -77,9 +111,9 @@ function Choose_Soda_Again(choice,echo){
 	// Shortcut
 	var CL = Game.choices.Clem_Likes;
 
-	// Coke -- you live only if Clem likes Coke/America
+	// Coke -- you live only if Clem likes Coke/Soda
 	if(choice==0){
-		if(CL=="Coke" || CL=="America"){
+		if(CL=="Coke" || CL=="soda"){
 			alive = true;
 		}else{
 			Game.say("Lee",		cutoff);
@@ -87,9 +121,9 @@ function Choose_Soda_Again(choice,echo){
 		}
 	}
 
-	// Pepsi -- you live only if Clem likes Pepsi/America
+	// Pepsi -- you live only if Clem likes Pepsi/Soda
 	if(choice==1){
-		if(CL=="Pepsi" || CL=="America"){
+		if(CL=="Pepsi" || CL=="soda"){
 			alive = true;
 		}else{
 			Game.say("Lee",		cutoff);
@@ -111,14 +145,15 @@ function Choose_Soda_Again(choice,echo){
 		}else{
 			Game.say("Lee",		"Any soft drink you--");
 			Game.say("...",		"[BLAM BLAM BLAM]");
-			Game.say("Kenny",	"You coward.");
+			Game.say("Kenny",	"Coward.");
 		}
 	}
 
 	// Which of two ENDINGS do you get?
 	if(alive){
 		Game.say("Lee",		"...");
-		Game.say("Lee",		"..."+echo);
+		Game.say("Lee",		echo);
+		Game.choices.Choose_Soda_Again = ["Coke","Pepsi","water","any"][choice];
 		Ending_Live();
 	}else{
 		Ending_Die();
@@ -128,17 +163,17 @@ function Choose_Soda_Again(choice,echo){
 
 function Ending_Live(){
 
-	// What Clem likes
-	var CL = Game.choices.Clem_Likes;
-	if(CL!="Pepsi" && CL!="Coke"){ // If not specified, choose randomly.
-		CL = (Math.random()>0.5) ? "Pepsi" : "Coke";
+	// What You Offered
+	var CSA = Game.choices.Choose_Soda_Again;
+	if(CSA=="any"){ // If just soda, choose randomly.
+		CSA = (Math.random()>0.5) ? "Pepsi" : "Coke";
 	}
 
 	Game.say("Kenny",	"...");
 	Game.say("Kenny",	"You're goddamn right.");
 	Game.say("Kenny",	"[puts down gun]");
 	Game.say("Lee",		"...");
-	Game.say("Kenny",	"[throws Lee a can of "+CL+"]");
+	Game.say("Kenny",	"[throws Lee a can of "+CSA+"]");
 	Game.say("Lee",		"...");
 	Game.say("Clem",	"Cheers, motherfucker.");
 	Game.say("...",		"[THE END]");
@@ -149,14 +184,15 @@ function Ending_Die(){
 
 	// What Clem likes
 	var CL = Game.choices.Clem_Likes;
-	if(CL!="Pepsi" && CL!="Coke"){ // If not specified, choose randomly.
+	if(CL=="soda"){ // If just soda, choose randomly.
 		CL = (Math.random()>0.5) ? "Pepsi" : "Coke";
 	}
 
-	Game.say("Kenny",	"You saw it. He was bit.");
 	Game.say("Lee",		"[gurgle]");
-	Game.say("Clem",	"Yes. He was going to turn.");
+	Game.say("Kenny",	"You saw it. He was bit.");
 	Game.say("Lee",		"[twitch]");
+	Game.say("Clem",	"Yes. He was going to turn.");
+	Game.say("Lee",		"[asdf]");
 	Game.say("Kenny",	"What a shame.");
 	Game.say("Lee",		"[dies]");
 	
