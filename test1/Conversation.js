@@ -15,8 +15,8 @@ function Character(name,color){
 		var dom = document.createElement("div");
 		dom.innerHTML = "<span style='color:"+color+"'><b>"+name+": </b>"+message+"</span>";
 
-		// How long does the message last? Approx 5 words per second, or 200ms per word. Plus 500ms just in case.
-		var duration = 500 + message.split(" ").length*200;
+		// How long does the message last? Approx 6 words per second, or 160ms per word. Plus 1000ms just in case.
+		var duration = 1000 + message.split(" ").length*160;
 
 		// Add & Remove based on time.
 		timer += 100;

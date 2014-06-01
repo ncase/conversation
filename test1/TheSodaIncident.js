@@ -141,10 +141,8 @@ function Ending_Live(){
 	k("...");
 	k("You're goddamn right.");
 	scene("bg/live_1.png");
-	//k("[puts down gun]");
 	l("...");
 	scene("bg/live_2.png");
-	//k("[throws Lee a can of "+drink+"]");
 	l("...");
 	c("Cheers, motherfucker.");
 	_("[THE END]");
@@ -171,7 +169,6 @@ function Ending_Die(){
 	l("[asdf]");
 	k("What a shame.");
 	l("[dies]");
-	//k("[Gives Clementine a can of "+drink+"]");
 	k("To lost friends.");
 	c("To lost friends.");
 	_("[THE END]");
