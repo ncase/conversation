@@ -1,15 +1,37 @@
 <style>
-	body{
-		margin:40px;
-		font-size: 20px;
-		font-family: sans-serif;
-		font-weight: 100;
-	}
-	#game_output > div{
-		margin-bottom: 20px;
-	}
+body{
+	margin:0px;
+}
+#game{
+	width:800px;
+	height:520px;
+	position: relative;
+}
+#picture{
+	position: absolute;
+	width:800px; height:450px;
+	background: #CCCC99;
+}
+#caption{
+
+	position: absolute; bottom:0;
+	width:750px;height:20px;
+	padding:25px;
+
+	font-size: 20px;
+	font-family: sans-serif;
+	font-weight: 100;
+	text-align: center;
+
+	background: #333;
+
+}
 </style>
-<div id="game_output"></div>
+
+<div id="game">
+	<img id="picture" src="bg/intro.png"></img>
+	<div id="caption"></div>
+</div>
 
 <script src="Conversation.js"></script>
 <script src="TheSodaIncident.js"></script>

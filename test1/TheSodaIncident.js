@@ -1,13 +1,17 @@
-l = new Character("Lee","#555");
+l = new Character("Lee","#fff");
 c = new Character("Clementine","#b695c0");
-k = new Character("Kenny","#008000");
+k = new Character("Kenny","#44B344");
 _ = new Character("");
 
 function Start(){
+
+	scene("bg/intro.png");
+
 	c("Lee!");
 	l("Hi, Clementine.");
 	c("Do you prefer Coke or Pepsi?");
 	choose("Coke.","Pepsi.","Neither.","Both.",Choose_Soda);
+
 }
 
 function Choose_Soda(choice){
@@ -19,22 +23,26 @@ function Choose_Soda(choice){
 	// Clem expresses her disappointment.
 	if(choice.number==0){
 		l("Why, I like Coke better!");
-		c("[crying] Do you always hate the sweeter, younger version?...");
+		scene("bg/what.png");
+		c("Do you always hate the sweeter, younger version?...");
 		choose("What?! No!","Yes I do.","Yes, including you, Clem.","...",Kenny_Enters);
 	}
 	if(choice.number==1){
 		l("You just can't go wrong with Pepsi!");
-		c("[crying] You like copycats?");
-		choose("What?! No!","Yes I do.","[crying] You like copycats?","...",Kenny_Enters);
+		scene("bg/what.png");
+		c("You like copycats?");
+		choose("What?! No!","Yes I do.","You like copycats?","...",Kenny_Enters);
 	}
 	if(choice.number==2){
 		l("Ugh. They're both bad for you, Clem.");
-		c("[crying] Do you want to destroy my childhood?...");
+		scene("bg/what.png");
+		c("Do you want to destroy my childhood?...");
 		choose("What?! No!","Yes I do.","Better than destroying your health!","...",Kenny_Enters);
 	}
 	if(choice.number==3){
 		l("I think they're both equally as good!");
-		c("[crying] You're a communist! A freedom-hating communist!");
+		scene("bg/what.png");
+		c("You're a communist! A freedom-hating communist!");
 		choose("What?! No!","Yes I am.","For the motherland!","...",Kenny_Enters);
 	}
 
@@ -47,11 +55,13 @@ function Kenny_Enters(choice){
 
 	// Heated Argument
 	l(choice.message);
+	scene("bg/kenny.png");
 	k("Lee, you talkin' shit about "+wytsa+"?!");
 	l("Kenny, it's not what you think.");
 	c("He was talkin' shit about "+wytsa+"!");
 	l("...Clementine!");
-	k("[points gun at Lee] No one talks shit about "+wytsa+" and gets away with it!");
+	scene("bg/threaten.png");
+	k("No one talks shit about "+wytsa+" and gets away with it!");
 	l("Kenny, calm down!");
 	k("This IS calm.");
 	l("Put the gun down, and let's just talk about this over a nice cup of...");
@@ -75,6 +85,7 @@ function Choose_Soda_Again(choice){
 			alive = true;
 		}else{
 			l(cutoff);
+			scene("bg/die_1.png");
 			_("[BLAM BLAM BLAM]");
 		}
 	}
@@ -85,6 +96,7 @@ function Choose_Soda_Again(choice){
 			alive = true;
 		}else{
 			l(cutoff);
+			scene("bg/die_1.png");
 			_("[BLAM BLAM BLAM]");
 		}
 	}
@@ -93,6 +105,7 @@ function Choose_Soda_Again(choice){
 	if(choice.number==2){
 		l("Water.");
 		k("You... sick... bastard.");
+		scene("bg/die_1.png");
 		_("[BLAM BLAM BLAM]");
 	}
 
@@ -102,6 +115,7 @@ function Choose_Soda_Again(choice){
 			alive = true;
 		}else{
 			l("Any soft drink you--");
+			scene("bg/die_1.png");
 			_("[BLAM BLAM BLAM]");
 			k("Communist.");
 		}
@@ -126,9 +140,11 @@ function Ending_Live(){
 	// Ending Conversation
 	k("...");
 	k("You're goddamn right.");
-	k("[puts down gun]");
+	scene("bg/live_1.png");
+	//k("[puts down gun]");
 	l("...");
-	k("[throws Lee a can of "+drink+"]");
+	scene("bg/live_2.png");
+	//k("[throws Lee a can of "+drink+"]");
 	l("...");
 	c("Cheers, motherfucker.");
 	_("[THE END]");
@@ -147,6 +163,7 @@ function Ending_Die(){
 	}
 
 	// Ending Conversation
+	scene("bg/die_2.png");
 	l("[gurgle]");
 	k("You saw it. He was bit.");
 	l("[twitch]");
@@ -154,7 +171,7 @@ function Ending_Die(){
 	l("[asdf]");
 	k("What a shame.");
 	l("[dies]");
-	k("[Gives Clementine a can of "+drink+"]");
+	//k("[Gives Clementine a can of "+drink+"]");
 	k("To lost friends.");
 	c("To lost friends.");
 	_("[THE END]");
